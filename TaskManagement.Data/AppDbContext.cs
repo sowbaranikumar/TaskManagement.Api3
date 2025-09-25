@@ -15,8 +15,19 @@ namespace TaskManagement.Data.Db
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
-          
+            modelBuilder.Entity<TaskItem>(entity =>
+            {
+                entity.Property(e => e.IsActive)
+                    .HasDefaultValue(true)          
+                    .HasColumnName("isActive");     
+                entity.Property(e => e.IsDeleted)
+                    .HasDefaultValue(false)         
+                    .HasColumnName("isDeleted");    
+                 //entity.Property(e => e.DeletedAt)
+                //    .HasColumnName("deletedAt");    
+            });
+            modelBuilder.Entity<TaskItem>()
+         .HasQueryFilter(e => !e.IsDeleted && e.IsActive);
             modelBuilder.Entity<User>()
                 .HasMany(u => u.Tasks)
                 .WithOne(t => t.User)

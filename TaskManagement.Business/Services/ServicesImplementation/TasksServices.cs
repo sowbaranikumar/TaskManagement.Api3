@@ -4,7 +4,6 @@ using TaskManagement.Business.DTOs;
 using TaskManagement.Business.Interfaces;
 using TaskManagement.Data.Repositories.Interfaces;
 using TaskManagement.Entity.Entities;
-
 namespace TaskManagement.Business.Services
 {
     public class TasksServices : ITasksServices
@@ -30,29 +29,31 @@ namespace TaskManagement.Business.Services
             return task == null ? null : _mapper.Map<TaskItemDto>(task);
         }
 
-        public async Task<List<TaskItemDto>> GetTasksByUserIdAsync(int userId)
-        {
-            var tasks = await _tasksRepository.GetTasksByUserIdAsync(userId);
-            return _mapper.Map<List<TaskItemDto>>(tasks);
-        }
-
         public async Task<TaskItemDto> CreateTaskAsync(TaskItemDto dto)
         {
             var task = _mapper.Map<TaskItem>(dto);
-            var createdTask = await _tasksRepository.CreateTaskAsync(task);
+            var createdTask = await _tasksRepository.AddAsync(task);
             return _mapper.Map<TaskItemDto>(createdTask);
         }
 
         public async Task<bool> UpdateTaskAsync(TaskItemDto dto)
         {
             var task = _mapper.Map<TaskItem>(dto);
-            return await _tasksRepository.UpdateTaskAsync(task);
-           
+            var updatedTask = await _tasksRepository.UpdateAsync(task);
+            return updatedTask != null;
         }
 
         public async Task<bool> DeleteTaskAsync(int id)
         {
-            return await _tasksRepository.DeleteTaskAsync(id);
+           
+            await _tasksRepository.DeleteAsync(id);
+            return true;
+        }
+
+        public async Task<List<TaskItemDto>> GetTasksByUserIdAsync(int userId)
+        {
+            var tasks = await _tasksRepository.GetTasksByUserIdAsync(userId);
+            return _mapper.Map<List<TaskItemDto>>(tasks);
         }
 
         public async Task<List<TaskItemDto>> GetTasksDueThisWeekAsync()
@@ -67,10 +68,9 @@ namespace TaskManagement.Business.Services
             return _mapper.Map<List<TaskItemDto>>(tasks);
         }
 
-        public async Task<Dictionary<int,int>> GetCompletedTaskCountPerUserAsync()
+        public async Task<Dictionary<int, int>> GetCompletedTaskCountPerUserAsync()
         {
             return await _tasksRepository.GetCompletedTaskCountPerUserAsync();
         }
-
     }
 }

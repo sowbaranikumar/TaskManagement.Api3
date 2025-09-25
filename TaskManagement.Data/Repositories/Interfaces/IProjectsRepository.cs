@@ -6,13 +6,23 @@ using System.Threading.Tasks;
 
 using TaskManagement.Entity.Entities;
 
+//namespace TaskManagement.Data.Repositories.Interfaces
+//{
+//    public interface IProjectsRepository
+//    {
+//        Task<List<Project>> GetAllProjectsAsync();
+//        Task<Project?> GetByIdAsync(int id);
+//    }
+//}
+
+
 namespace TaskManagement.Data.Repositories.Interfaces
 {
-    public interface IProjectsRepository
+    public interface IProjectsRepository : IGenericRepository<Project>
     {
-        Task<List<Project>> GetAllProjectsAsync();
-        Task<Project?> GetByIdAsync(int id);
+        
     }
 }
+
 
 

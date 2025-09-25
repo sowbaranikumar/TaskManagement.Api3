@@ -2,7 +2,6 @@
 using TaskManagement.Business.DTOs;
 using TaskManagement.Business.Interfaces;
 using TaskManagement.Data.Repositories.Interfaces;
-
 namespace TaskManagement.Business.Services
 {
     public class ProjectsServices : IProjectsServices
@@ -18,7 +17,7 @@ namespace TaskManagement.Business.Services
 
         public async Task<List<ProjectDto>> GetAllProjectsAsync()
         {
-            var projects = await _projectsRepository.GetAllProjectsAsync();
+            var projects = await _projectsRepository.GetAllAsync();
             return _mapper.Map<List<ProjectDto>>(projects);
         }
 
