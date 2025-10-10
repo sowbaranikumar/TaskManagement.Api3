@@ -33,5 +33,6 @@ namespace TaskManagement.Data.Repositories.Interfaces
         Task<List<TaskItem>> GetTasksDueThisWeekAsync();
         Task<List<TaskItem>> GetOverdueOrIncompleteTasksAsync();
         Task<Dictionary<int, int>> GetCompletedTaskCountPerUserAsync();
+      //  Task<List<TaskItem>> GetTaskByUserIdSPAsync(int userId);
     }
 }

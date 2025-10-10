@@ -101,7 +101,7 @@ using TaskManagement.Entity.Entities;
 
 namespace TaskManagement.Data.Repositories.Implementations
 {
-    public class TasksRepository : GenericRepository<TaskItem>, ITasksRepository
+    public class TasksRepository:GenericRepository<TaskItem>,ITasksRepository
     {
         private readonly AppDbContext _context;
 
@@ -110,11 +110,12 @@ namespace TaskManagement.Data.Repositories.Implementations
             _context = context;
         }
 
+                //.Where(t => t.UserId == userId)
         public async Task<List<TaskItem>> GetTasksByUserIdAsync(int userId)
         {
             return await _context.Tasks
-                .Where(t => t.UserId == userId)
-                .ToListAsync();
+                 .FromSqlRaw("EXEC GetTasksByUserId @UserId ={0}",userId)
+                 .ToListAsync();
         }
 
         public async Task<List<TaskItem>> GetTasksDueThisWeekAsync()

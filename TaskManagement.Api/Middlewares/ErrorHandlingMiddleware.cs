@@ -55,17 +55,17 @@ namespace TaskManagement.Api.Middlewares
             {
                 case UnauthorizedAccessException:
                     return ((int)HttpStatusCode.Unauthorized,
-                        ApiResponseFactory.BadRequest<string>(new List<string> { "Unauthorized" }));
+                        ApiResponseFactory.BadRequest<string>(new List<string> {"Unauthorized"}));
                 case ValidationException:
                     return ((int)HttpStatusCode.BadRequest,
-                        ApiResponseFactory.BadRequest<string>(new List<string> { ex.Message }));
+                        ApiResponseFactory.BadRequest<string>(new List<string> {ex.Message}));
                 default:
                     var msg = "An unexpected error occurred. Please try again later.";
                     if (env.IsDevelopment())
                         msg = $"{msg} | {ex.Message}";
 
                     return ((int)HttpStatusCode.InternalServerError,
-                        ApiResponseFactory.BadRequest<string>(new List<string> { msg }));
+                        ApiResponseFactory.BadRequest<string>(new List<string> {msg}));
             }
         }
     }

@@ -18,5 +18,6 @@ namespace TaskManagement.Business.Interfaces
         Task<List<TaskItemDto>> GetTasksDueThisWeekAsync();
         Task<List<TaskItemDto>> GetOverdueOrIncompleteTasksAsync();
         Task<Dictionary<int, int>> GetCompletedTaskCountPerUserAsync();
+        //Task<List<TaskItemDto>> GetTaskByUserIdSPAsync(int userId);
     }
 }

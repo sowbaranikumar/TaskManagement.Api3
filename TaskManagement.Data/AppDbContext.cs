@@ -40,7 +40,7 @@ namespace TaskManagement.Data.Db
 
      
             modelBuilder.Entity<User>().HasData(
-                new User { Id = 1, Name = "Alice Johnson", Email = "alice@example.com", Role = "Manager" },
+                new User { Id = 1, Name = "Alice Johnson", Email = "alice@example.com", Role="Manager" },
                 new User { Id = 2, Name = "Bob Smith", Email = "bob@example.com", Role = "Developer" },
                 new User { Id = 3, Name = "Charlie Brown", Email = "charlie@example.com", Role = "Tester" }
             );

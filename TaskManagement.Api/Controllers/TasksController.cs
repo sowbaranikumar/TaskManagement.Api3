@@ -3,6 +3,7 @@ using TaskManagement.Api.Filters;
 using TaskManagement.Business.DTOs;
 using TaskManagement.Business.Interfaces;
 using TaskManagement.Business.ResponseModels;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace TaskManagement.Api.Controllers
 {
@@ -16,6 +17,12 @@ namespace TaskManagement.Api.Controllers
         public TasksController(ITasksServices tasksServices)
         {
             _tasksServices = tasksServices;
+        }
+        [HttpGet("user/{userId}")]
+        public async Task<ActionResult<List<TaskItemDto>>> GetTasksByUser(int userId)
+        {
+            var tasks = await _tasksServices.GetTasksByUserIdAsync(userId);
+            return Ok(tasks);
         }
 
         [HttpGet]
@@ -43,6 +50,10 @@ namespace TaskManagement.Api.Controllers
         [ServiceFilter(typeof(ApiResponseWrapperFilter))]
         public async Task<ActionResult> CreateTask(TaskItemDto dto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ApiResponseFactory.BadRequest<object>(ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList()));
+            }
             var created = await _tasksServices.CreateTaskAsync(dto);
            // return CreatedAtAction(nameof(GetTask), new { id = created.Id }, ApiResponseFactory.Created(created));
             return CreatedAtAction(nameof(GetTask), new { id = created.Id },created);
@@ -51,10 +62,14 @@ namespace TaskManagement.Api.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateTask(int id, TaskItemDto dto)
         {
-            if (id != dto.Id)
-                return BadRequest(ApiResponseFactory.BadRequest<object>(new List<string> { "ID in URL and payload do not match." }));
+            if (id!=dto.Id)
+                return BadRequest(ApiResponseFactory.BadRequest<object>(new List<string>{ "ID in URL and payload do not match."}));
 
-            var updated = await _tasksServices.UpdateTaskAsync(dto);
+            if(!ModelState.IsValid)
+            {
+                return BadRequest(ApiResponseFactory.BadRequest<object>(ModelState.Values.SelectMany(v =>v.Errors).Select(e =>e.ErrorMessage).ToList()));
+            }
+            var updated=await _tasksServices.UpdateTaskAsync(dto);
             if (!updated)
                 return NotFound(ApiResponseFactory.NotFound<object>());
 
@@ -73,7 +88,7 @@ namespace TaskManagement.Api.Controllers
         [HttpGet("filter")]
         public async Task<ActionResult> FilteredTasks(
            [FromQuery] string type,
-           [FromQuery] int? userId = null)
+           [FromQuery] int? userId=null)
         {
             switch (type.ToLower())
             {
