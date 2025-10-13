@@ -56,6 +56,17 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowReactApp", policy =>
+    {
+        policy.WithOrigins("http://localhost:5173") 
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
+
 var app = builder.Build();
 app.UseMiddleware<ErrorHandlingMiddleware>();
 //app.UseGlobalErrorHandling();
@@ -66,6 +77,7 @@ app.UseSwagger();
 app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
+app.UseCors("AllowReactApp");
 app.UseAuthorization();
 app.MapControllers();
 Log.Information("This is a test info log.");

@@ -110,14 +110,13 @@ namespace TaskManagement.Data.Repositories.Implementations
             _context = context;
         }
 
-                //.Where(t => t.UserId == userId)
         public async Task<List<TaskItem>> GetTasksByUserIdAsync(int userId)
         {
             return await _context.Tasks
-                 .FromSqlRaw("EXEC GetTasksByUserId @UserId ={0}",userId)
+                .Where(t => t.UserId == userId)
+                 //.FromSqlRaw("EXEC GetTasksByUserId @UserId ={0}",userId)
                  .ToListAsync();
         }
-
         public async Task<List<TaskItem>> GetTasksDueThisWeekAsync()
         {
             var start = DateTime.Today;
@@ -139,9 +138,9 @@ namespace TaskManagement.Data.Repositories.Implementations
         public async Task<Dictionary<int, int>> GetCompletedTaskCountPerUserAsync()
         {
             return await _context.Tasks
-                .Where(t => t.IsCompleted)
-                .GroupBy(t => t.UserId)
-                .ToDictionaryAsync(g => g.Key, g => g.Count());
+                .Where(t =>t.IsCompleted)
+                .GroupBy(t =>t.UserId)
+                .ToDictionaryAsync(g => g.Key,g =>g.Count());
         }
     }
 }

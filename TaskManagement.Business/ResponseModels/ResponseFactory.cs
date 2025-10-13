@@ -14,13 +14,13 @@ namespace TaskManagement.Business.ResponseModels
         {
             return new GenericAPIResponse<T>
             {
-                StatusCode = (int)HttpStatusCode.OK,
-                StatusMsg = "Success",
-                ErrorMsg = [],
-                Response = response
+                StatusCode=(int)HttpStatusCode.OK,
+                StatusMsg="Success",
+                ErrorMsg=[],
+                Response=response
             };
         }
-    public static GenericAPIResponse<T> Created<T>(T response)
+    public static GenericAPIResponse<T>Created<T>(T response)
         {
             return new GenericAPIResponse<T>
             {
@@ -31,7 +31,7 @@ namespace TaskManagement.Business.ResponseModels
             };
         }
 
-        public static GenericAPIResponse<T> BadRequest<T>(List<string> errorMsgs)
+        public static GenericAPIResponse<T>BadRequest<T>(List<string> errorMsgs)
         {
             return new GenericAPIResponse<T>
             {
